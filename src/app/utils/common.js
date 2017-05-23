@@ -50,14 +50,20 @@ export const getCell = (minesField, x, y) => {
   if (!minesField[x][y]) {
     return {mine:false, revealed:false};
   }
-  return Object.assign({}, minesField[x][y]);
+  return minesField[x][y];
 };
 
-export const setCell = (minesField, x, y, newCell) => {
-  let newField = JSON.parse(JSON.stringify(minesField));
-  if (!newField[x]) {
-    newField[x] = {};
+export const countSurroundingMines = (minesField, x, y, colsCount, rowsCount) => {
+  let count = 0;
+  for (let x1=Math.max(x-1, 0); x1<=Math.min(x+1, colsCount); x1++) {
+    for (let y1=Math.max(y-1, 0); y1<=Math.min(y+1, rowsCount); y1++) {
+      if (x===x1 && y===y1) {
+        continue;
+      }
+      if (getCell(minesField, x1, y1).mine) {
+        count++;
+      }
+    }
   }
-  newField[x,y] = newCell;
-  return newField;
+  return count;
 };

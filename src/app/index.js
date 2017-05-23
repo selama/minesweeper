@@ -1,14 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
+import Minesweeper from './Components/Minesweeper';
 
-class Minesweeper extends React.Component {
+class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Hello!</h1>
+        <Minesweeper/>
       </div>
     );
   }
 }
 
-render(<Minesweeper/>, window.document.getElementById("minesweeper"));
+render(<App/>, window.document.getElementById("app"));

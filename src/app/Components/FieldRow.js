@@ -1,25 +1,22 @@
 import React from 'react';
 import FieldCell from '../Components/FieldCell';
 
-const getRowCells = (rowIndex, colsCount, minesField, onClick, onRightClick) => {
-  let rowCells = [];
-  for (let colIndex = 0; colIndex<colsCount; colIndex++) {
-    rowCells.push(<FieldCell key={rowIndex + '_' + colIndex}
-                             rowIndex={rowIndex}
-                             colIndex={colIndex}
-                             minesField={minesField}
-                             onClick={onClick}
-                             onRightClick={onRightClick}>
-
-    </FieldCell>);
+const getRowCells = (minesFieldYRow, onClick, onRightClick) => {
+  let xRowCells = [];
+  for (let x = 0; x<Object.keys(minesFieldYRow).length; x++) {
+    xRowCells.push(<FieldCell
+                    key={x}
+                    cell={minesFieldYRow[x]}
+                    onClick={onClick}
+                    onRightClick={onRightClick}/>);
   }
-  return rowCells;
+  return xRowCells;
 };
 
 const FieldRow = (props) => {
   return (
     <div className="row">
-      {getRowCells(props.rowIndex, props.colsCount, props.minesField, props.onClick, props.onRightClick)}
+      {getRowCells(props.minesFieldYRow, props.onClick, props.onRightClick)}
     </div>
   );
 };

@@ -31,7 +31,7 @@ const index2y = (index, xSize) => {
 }
 
 export const setRandomMines = (gameState, minesCount) => {
-  let newGameState = Object.assign({}, gameState);
+  let newGameState = Object.assign({}, gameState, {minesCount: minesCount, revealedCount: 0, markedCount: 0, exploded: false});
   const ySize = Object.keys(newGameState.minesField).length;
   const xSize = Object.keys(newGameState.minesField[0]).length;
   const allCellsCount = ySize * xSize;
@@ -65,7 +65,9 @@ const getSurroundingCells = (minesField, x, y) => {
 
 export const initiateMinesField = (xSize, ySize) => {
   let gameState = {
-    minesField : []
+    minesField: [],
+    xSize: xSize,
+    ySize: ySize
   };
   const defaultCell = {
     mine: false,

@@ -13,33 +13,33 @@ class Minesweeper extends React.Component {
     const xSize = 10;
     const ySize = 10;
 
-    const minesField = setRandomMines(initiateMinesField(xSize, ySize), minesCount);
+    const gameState = setRandomMines(initiateMinesField(xSize, ySize), minesCount);
     this.setState({
-      minesField
+      gameState
     });
   }
 
   onClick(e, x, y) {
     e.preventDefault();
-    if (!isGameOver(this.state.minesField)) {
-      const minesField = revealCell(this.state.minesField, x, y);
-      this.setState({minesField: minesField});
+    if (!isGameOver(this.state.gameState)) {
+      const gameState = revealCell(this.state.gameState, x, y);
+      this.setState({gameState: gameState});
     }
   }
 
   onRightClick(e, x, y) {
     e.preventDefault();
-    if (!isGameOver(this.state.minesField)) {
-      const minesField = toggleMarkCell(this.state.minesField, x, y);
-      this.setState({minesField: minesField});
+    if (!isGameOver(this.state.gameState)) {
+      const gameState = toggleMarkCell(this.state.gameState, x, y);
+      this.setState({gameState: gameState});
     }
   }
 
   getFieldRows() {
     let yRows = [];
-    for (let y = 0; y < Object.keys(this.state.minesField).length; y++) {
+    for (let y = 0; y < Object.keys(this.state.gameState.minesField).length; y++) {
       yRows.push(<FieldRow key={y}
-                           minesFieldYRow={this.state.minesField[y]}
+                           minesFieldYRow={this.state.gameState.minesField[y]}
                            onClick={this.onClick.bind(this)}
                            onRightClick={this.onRightClick.bind(this)}/>);
     }

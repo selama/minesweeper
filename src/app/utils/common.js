@@ -30,18 +30,18 @@ const index2y = (index, xSize) => {
   return Math.floor(index / xSize);
 }
 
-export const setRandomMines = (minesField, minesCount) => {
-  let newMinesField = Object.assign({}, minesField);
-  const ySize = Object.keys(minesField).length;
-  const xSize = Object.keys(minesField[0]).length;
+export const setRandomMines = (gameState, minesCount) => {
+  let newGameState = Object.assign({}, gameState);
+  const ySize = Object.keys(newGameState.minesField).length;
+  const xSize = Object.keys(newGameState.minesField[0]).length;
   const allCellsCount = ySize * xSize;
   randomNumbers(0, allCellsCount, minesCount).forEach((mineIndex) => {
     const x = index2x(mineIndex, xSize);
     const y = index2y(mineIndex, xSize);
-    let cell = getCell(newMinesField, x, y);
+    let cell = getCell(newGameState.minesField, x, y);
     cell.mine = true;
   });
-  return newMinesField;
+  return newGameState;
 };
 
 export const getCell = (minesField, x, y) => {
@@ -64,7 +64,9 @@ const getSurroundingCells = (minesField, x, y) => {
 };
 
 export const initiateMinesField = (xSize, ySize) => {
-  let minesField = [];
+  let gameState = {
+    minesField : []
+  };
   const defaultCell = {
     mine: false,
     exploded: false,
@@ -72,51 +74,51 @@ export const initiateMinesField = (xSize, ySize) => {
     revealed: false
   };
   for (let y = 0; y < ySize; y++) {
-    minesField[y] = {};
+    gameState.minesField[y] = {};
     for (let x = 0; x < xSize; x++) {
-      minesField[y][x] = Object.assign({}, defaultCell, {x: x, y: y});
+      gameState.minesField[y][x] = Object.assign({}, defaultCell, {x: x, y: y});
     }
   }
-  return minesField;
+  return gameState;
 };
 
-const revealSurrounding = (minesField, surroundingCells) => {
-  let revealedMinesField = Object.assign({}, minesField);
+const revealSurrounding = (gameState, surroundingCells) => {
+  let newGameState = Object.assign({}, gameState);
   surroundingCells.forEach((cell) => {
-    revealedMinesField = revealCell(revealedMinesField, cell.x, cell.y);
+    newGameState = revealCell(newGameState, cell.x, cell.y);
   });
-  return revealedMinesField;
+  return newGameState;
 };
 
-export const revealCell = (minesField, x, y) => {
-  let revealedMinesField = Object.assign({}, minesField);
-  let cell = getCell(revealedMinesField, x, y);
+export const revealCell = (gameState, x, y) => {
+  let newGameState = Object.assign({}, gameState);
+  let cell = getCell(newGameState.minesField, x, y);
   if (!cell.revealed && !cell.marked) {
     cell.revealed = true;
     if (cell.mine) {
       cell.exploded = true;
     } else {
-      const surroundingCells = getSurroundingCells(revealedMinesField, x, y);
+      const surroundingCells = getSurroundingCells(newGameState.minesField, x, y);
       cell.surroundingMinesCount = surroundingCells.filter((cell) => cell.mine).length;
       if (cell.surroundingMinesCount === 0) {
-        revealedMinesField = revealSurrounding(revealedMinesField, surroundingCells);
+        newGameState = revealSurrounding(newGameState, surroundingCells);
       }
     }
   }
-  return revealedMinesField;
+  return newGameState;
 };
 
-export const toggleMarkCell = (minesField, x, y) => {
-  let revealedMinesField = Object.assign({}, minesField);
-  let cell = getCell(revealedMinesField, x, y);
+export const toggleMarkCell = (gameState, x, y) => {
+  let newGameState = Object.assign({}, gameState);
+  let cell = getCell(newGameState.minesField, x, y);
   if (!cell.revealed) {
     cell.marked = !cell.marked;
   }
-  return revealedMinesField;
+  return newGameState;
 };
 
-export const isGameOver = (minesField) => {
-  return isGameWon(minesField) || isGameLost(minesField);
+export const isGameOver = (gameState) => {
+  return isGameWon(gameState) || isGameLost(gameState);
 }
 
 export const isGameWon = (minesField) => {

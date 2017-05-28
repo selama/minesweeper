@@ -1,6 +1,6 @@
 const getRangeNumbers = (minInclusive, maxExclusive) => {
   let rangeNumbers = [];
-  for (let i=minInclusive; i<maxExclusive; i++) {
+  for (let i = minInclusive; i < maxExclusive; i++) {
     rangeNumbers.push(i);
   }
   return rangeNumbers;
@@ -52,9 +52,9 @@ const getSurroundingCells = (minesField, x, y) => {
   let surroundingCells = [];
   const ySize = Object.keys(minesField).length;
   const xSize = Object.keys(minesField[0]).length;
-  for (let x1=Math.max(x-1, 0); x1<=Math.min(x+1, xSize-1); x1++) {
-    for (let y1=Math.max(y-1, 0); y1<=Math.min(y+1, ySize-1); y1++) {
-      if (x===x1 && y===y1) {
+  for (let x1 = Math.max(x - 1, 0); x1 <= Math.min(x + 1, xSize - 1); x1++) {
+    for (let y1 = Math.max(y - 1, 0); y1 <= Math.min(y + 1, ySize - 1); y1++) {
+      if (x === x1 && y === y1) {
         continue;
       }
       surroundingCells.push(getCell(minesField, x1, y1));
@@ -71,9 +71,9 @@ export const initiateMinesField = (xSize, ySize) => {
     marked: false,
     revealed: false
   };
-  for (let y=0; y<ySize; y++) {
+  for (let y = 0; y < ySize; y++) {
     minesField[y] = {};
-    for (let x=0; x<xSize; x++) {
+    for (let x = 0; x < xSize; x++) {
       minesField[y][x] = Object.assign({}, defaultCell, {x: x, y: y});
     }
   }
@@ -91,7 +91,7 @@ const revealSurrounding = (minesField, surroundingCells) => {
 export const revealCell = (minesField, x, y) => {
   let revealedMinesField = Object.assign({}, minesField);
   let cell = getCell(revealedMinesField, x, y);
-  if (!cell.revealed) {
+  if (!cell.revealed && !cell.marked) {
     cell.revealed = true;
     if (cell.mine) {
       cell.exploded = true;
@@ -114,3 +114,15 @@ export const toggleMarkCell = (minesField, x, y) => {
   }
   return revealedMinesField;
 };
+
+export const isGameOver = (minesField) => {
+  return isGameWon(minesField) || isGameLost(minesField);
+}
+
+export const isGameWon = (minesField) => {
+  return false;
+}
+
+export const isGameLost = (minesField) => {
+  false;
+}

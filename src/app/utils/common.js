@@ -97,6 +97,7 @@ export const revealCell = (gameState, x, y) => {
   let cell = getCell(newGameState.minesField, x, y);
   if (!cell.revealed && !cell.marked) {
     cell.revealed = true;
+    newGameState.revealedCount++;
     if (cell.mine) {
       cell.exploded = true;
     } else {
@@ -115,6 +116,11 @@ export const toggleMarkCell = (gameState, x, y) => {
   let cell = getCell(newGameState.minesField, x, y);
   if (!cell.revealed) {
     cell.marked = !cell.marked;
+    if (cell.marked) {
+      newGameState.markedCount++;
+    } else {
+      newGameState.markedCount--;
+    }
   }
   return newGameState;
 };
@@ -123,10 +129,16 @@ export const isGameOver = (gameState) => {
   return isGameWon(gameState) || isGameLost(gameState);
 }
 
-export const isGameWon = (minesField) => {
-  return false;
+export const isGameWon = (gameState) => {
+  return !isGameLost(gameState) && (((gameState.xSize * gameState.ySize) - gameState.revealedCount) === gameState.minesCount);
 }
 
-export const isGameLost = (minesField) => {
-  false;
+export const isGameLost = (gameState) => {
+  const res = Object.keys(gameState.minesField).some((row) => {
+      return Object.keys(gameState.minesField[row]).some((col) => {
+        return gameState.minesField[row][col].exploded;
+      });
+  });
+  console.log('isGameLost', res);
+  return res;
 }
